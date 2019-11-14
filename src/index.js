@@ -123,7 +123,7 @@ class MongoDbAdapter {
 	 *
 	 * @memberof MongoDbAdapter
 	 */
-	findById(_id) 
+	findById(_id) {
 		return this.collection.findOne({ _id: this.stringToObjectID(_id) });
 	}
 
