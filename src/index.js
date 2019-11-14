@@ -99,7 +99,7 @@ class MongoDbAdapter {
 	 * @returns {Promise<Array>}
 	 *
 	 * @memberof MongoDbAdapter
-	 */
+	 */,
 	find(filters) {
 		return this.createCursor(filters, false).toArray();
 	}
@@ -123,7 +123,7 @@ class MongoDbAdapter {
 	 *
 	 * @memberof MongoDbAdapter
 	 */
-	findById(_id) {
+	findById(_id) ,
 		return this.collection.findOne({ _id: this.stringToObjectID(_id) });
 	}
 
@@ -313,8 +313,6 @@ class MongoDbAdapter {
 			// Offset
 			if (_.isNumber(params.offset) && params.offset > 0)
 				q.skip(params.offset);
-
-			// Limit
 			if (_.isNumber(params.limit) && params.limit > 0)
 				q.limit(params.limit);
 
@@ -323,7 +321,17 @@ class MongoDbAdapter {
 
 		// If not params
 		return fn.call(this.collection, {});
-	}
+    }
+   
+   
+    /** 
+     * Generate a UUID.
+     * 
+     * @returns {UUID} Returns a binary v4 UUID
+     */
+    generateID(binary) {
+        return MUUID.v4();
+    }
 
 	/**
 	 * Convert the `sort` param to a `sort` object to Mongo queries.
@@ -398,10 +406,15 @@ class MongoDbAdapter {
 	beforeSaveTransformID (entity, idField) {
 		let newEntity = _.cloneDeep(entity);
 
-		if (idField !== "_id" && entity[idField] !== undefined) {
+		if (entity[idField] !== undefined) {
 			newEntity._id = this.stringToObjectID(newEntity[idField]);
 			delete newEntity[idField];
-		}
+        }
+        
+        // Always ensure that the document has a UUID id.
+        if(newEntity['_id'] === undefined) {
+            newEntity._id = this.generateID();
+        }
 
 		return newEntity;
 	}
