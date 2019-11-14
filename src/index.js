@@ -99,7 +99,7 @@ class MongoDbAdapter {
 	 * @returns {Promise<Array>}
 	 *
 	 * @memberof MongoDbAdapter
-	 */,
+	 */
 	find(filters) {
 		return this.createCursor(filters, false).toArray();
 	}
@@ -123,7 +123,7 @@ class MongoDbAdapter {
 	 *
 	 * @memberof MongoDbAdapter
 	 */
-	findById(_id) ,
+	findById(_id) 
 		return this.collection.findOne({ _id: this.stringToObjectID(_id) });
 	}
 
