@@ -330,7 +330,7 @@ class MongoDbAdapter {
      * @returns {UUID} Returns a binary v4 UUID
      */
     generateID(binary) {
-        return MUUID.v4();
+        return MUUID.v4().toString();
     }
 
 	/**
@@ -410,12 +410,12 @@ class MongoDbAdapter {
 			newEntity._id = this.stringToObjectID(newEntity[idField]);
 			delete newEntity[idField];
         }
-        
-        // Always ensure that the document has a UUID id.
-        if(newEntity['_id'] === undefined) {
-            newEntity._id = this.generateID();
-        }
 
+        // Always ensure that the document has a UUID id.
+        if(!_.has(newEntity, '_id')) {
+            newEntity._id = this.stringToObjectID(this.generateID());
+        }
+        
 		return newEntity;
 	}
 
